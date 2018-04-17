@@ -32,7 +32,7 @@ $ npm install perfecttense --save
 Once you have obtained an `App key` [here](https://app.perfecttense.com/api), you can initialize a pt-client object and begin interacting with our API.
 
 ```
-const ptClient = require('pt-client')
+const ptClient = require('perfecttense')
 
 // Configure app key
 ptClient.initialize({
