@@ -114,28 +114,15 @@ this.generateAppKey = function(apiKey, name, description, contactEmail, siteUrl)
 		siteUrl: siteUrl
 	}
 
-	if (pt.verbose) {
-		console.log("Generating App Key:")
-		console.log(data)
-	}
-	
 	return new Promise(function(resolve, reject) {
 		submitToPT(data, apiKey, "/generateAppKey")
 		.then(function(res) {
-			if (pt.verbose) {
-				console.log("Received response from PT:")
-				console.log(res.data)
-			}
 
 			if (!res.data.error) {
 				resolve(res.data)
 			} else reject(res)
 			
 		}).catch(function(error) {
-			if (pt.verbose) {
-				console.log("Error contacting pt:")
-				console.log(error.response.data)
-			}
 			reject(error.response)
 		})
 	})
@@ -337,7 +324,7 @@ this.interactiveEditor = function(config) {
 			const sentence = pt.getSentence(data, transform.sentenceIndex)
 			return pt.canMakeTransform(sentence, transform)
 		},
-		
+
 		// Returns true if the last action can be undone, else false
 		canUndoLastTransform: function() {
 
