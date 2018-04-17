@@ -1,0 +1,22 @@
+{
+  "name": "perfecttense",
+  "version": "1.0.23",
+  "description": "Client-side library to interact with the Perfect Tense API.",
+  "main": "perfecttense.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dagreene7/perfecttense.git"
+  },
+  "author": "Cortx",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dagreene7/perfecttense/issues"
+  },
+  "homepage": "https://github.com/dagreene7/perfecttense#readme",
+  "dependencies": {
+    "axios": "^0.18.0"
+  }
+}
