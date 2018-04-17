@@ -24,7 +24,7 @@ While the `App key` is used to verify the source of a request, an `Api key` is u
 
 Using npm:
 ```
-$ npm install pt-client --save
+$ npm install perfecttense --save
 ```
 
 ## Initializing
