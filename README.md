@@ -131,7 +131,7 @@ When in doubt, there is a utility function to determine if a transformation is c
 
 ```
 // Returns true if the transform is currently available in the sentence, else false
-ptClient.transformIsAvailable(transform, sentence)
+intEditor.canMakeTransform(transform)
 ```
 
 ### Iterate Through Corrections

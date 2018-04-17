@@ -94,6 +94,53 @@ this.submitJob = function(text, apiKey, options, responseType) {
 	})
 }
 
+/**
+ *	Generate an App key for this integration (alternatively, use our UI here: https://app.perfecttense.com/api).
+ *
+ *	@param {String} $apiKey				The API key to register this app under (likely your own)
+ *	@param {String} $name				The name of this app
+ *	@param {String} $description		The description of this app (minimum 50 characters)
+ *	@param {String} $contactEmail		Contact email address for this app (defaults to the email associated with the API key)
+ *	@param {String} $siteUrl			Optional URL that can be used to sign up for/use this app.
+ *
+ *	@return {String}					A unique app key
+ */
+this.generateAppKey = function(apiKey, name, description, contactEmail, siteUrl) {
+
+	const data = {
+		name: name,
+		description: description,
+		contactEmail: contactEmail,
+		siteUrl: siteUrl
+	}
+
+	if (pt.verbose) {
+		console.log("Generating App Key:")
+		console.log(data)
+	}
+	
+	return new Promise(function(resolve, reject) {
+		submitToPT(data, apiKey, "/generateAppKey")
+		.then(function(res) {
+			if (pt.verbose) {
+				console.log("Received response from PT:")
+				console.log(res.data)
+			}
+
+			if (!res.data.error) {
+				resolve(res.data)
+			} else reject(res)
+			
+		}).catch(function(error) {
+			if (pt.verbose) {
+				console.log("Error contacting pt:")
+				console.log(error.response.data)
+			}
+			reject(error.response)
+		})
+	})
+}
+
 /*********************************************************************
 				Interaction With Perfect Tense Result
 **********************************************************************/
@@ -286,6 +333,11 @@ this.interactiveEditor = function(config) {
 			return false
 		},
 
+		canMakeTransform: function(transform) {
+			const sentence = pt.getSentence(data, transform.sentenceIndex)
+			return pt.canMakeTransform(sentence, transform)
+		},
+		
 		// Returns true if the last action can be undone, else false
 		canUndoLastTransform: function() {
 
