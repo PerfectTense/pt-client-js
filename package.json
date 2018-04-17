@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dagreene7/perfecttense.git"
+    "url": "git+https://github.com/PerfectTense/pt-client-js.git"
   },
   "author": "Cortx",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/dagreene7/perfecttense/issues"
+    "url": "https://github.com/PerfectTense/pt-client-js/issues"
   },
-  "homepage": "https://github.com/dagreene7/perfecttense#readme",
+  "homepage": "https://github.com/PerfectTense/pt-client-js#readme",
   "dependencies": {
     "axios": "^0.18.0"
   }
