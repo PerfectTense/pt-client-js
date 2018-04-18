@@ -4,7 +4,6 @@
  *	Note: The word "transformation" is used interchangably with "correction" in all comments. Both refer to a
  *  grammatical mistake found in the document (also interchangable with "job")
  */
-
 /*********************************************************************
 						Init Axios
 **********************************************************************/
@@ -38,11 +37,11 @@ this.persist = true
  *	@param {Object} config.responseType=["rulesApplied"]	Optional array of response types (see API documentation) 
  */
 this.initialize = function(config) {
-	this.appKey = config.appKey || "",
-	this.verbose = config.verbose,
-	this.persist = config.persist,
-	this.options = config.options,
-	this.responseType = config.responseType || this.ALL_RESPONSE_TYPES
+    this.appKey = config.appKey || "",
+        this.verbose = config.verbose,
+        this.persist = config.persist,
+        this.options = config.options,
+        this.responseType = config.responseType || this.ALL_RESPONSE_TYPES
 }
 
 /*********************************************************************
@@ -60,38 +59,38 @@ this.initialize = function(config) {
  *	@return {Object}				Promise containing the job result
  */
 this.submitJob = function(text, apiKey, options, responseType) {
-	const data = {
-		text: text,
-		responseType: responseType || pt.responseType,
-		options: options || pt.options // can overwrite in individual requests, or use default
-	}
+    const data = {
+        text: text,
+        responseType: responseType || pt.responseType,
+        options: options || pt.options // can overwrite in individual requests, or use default
+    }
 
-	if (pt.verbose) {
-		console.log("Submitting job:")
-		console.log(data)
-	}
-	
-	return new Promise(function(resolve, reject) {
-		submitToPT(data, apiKey, "/correct")
-		.then(function(res) {
-			if (pt.verbose) {
-				console.log("Received response from PT:")
-				console.log(res.data)
-			}
+    if (pt.verbose) {
+        console.log("Submitting job:")
+        console.log(data)
+    }
 
-			if (res.status == 201) {
-				pt.setMetaData(res.data)
-				resolve(res.data)
-			} else reject(res)
-			
-		}).catch(function(error) {
-			if (pt.verbose) {
-				console.log("Error contacting pt:")
-				console.log(error.response.data)
-			}
-			reject(error.response)
-		})
-	})
+    return new Promise(function(resolve, reject) {
+        submitToPT(data, apiKey, "/correct")
+            .then(function(res) {
+                if (pt.verbose) {
+                    console.log("Received response from PT:")
+                    console.log(res.data)
+                }
+
+                if (res.status == 201) {
+                    pt.setMetaData(res.data)
+                    resolve(res.data)
+                } else reject(res)
+
+            }).catch(function(error) {
+                if (pt.verbose) {
+                    console.log("Error contacting pt:")
+                    console.log(error.response.data)
+                }
+                reject(error.response)
+            })
+    })
 }
 
 /**
@@ -107,25 +106,25 @@ this.submitJob = function(text, apiKey, options, responseType) {
  */
 this.generateAppKey = function(apiKey, name, description, contactEmail, siteUrl) {
 
-	const data = {
-		name: name,
-		description: description,
-		contactEmail: contactEmail,
-		siteUrl: siteUrl
-	}
+    const data = {
+        name: name,
+        description: description,
+        contactEmail: contactEmail,
+        siteUrl: siteUrl
+    }
 
-	return new Promise(function(resolve, reject) {
-		submitToPT(data, apiKey, "/generateAppKey")
-		.then(function(res) {
+    return new Promise(function(resolve, reject) {
+        submitToPT(data, apiKey, "/generateAppKey")
+            .then(function(res) {
 
-			if (!res.data.error) {
-				resolve(res.data)
-			} else reject(res)
-			
-		}).catch(function(error) {
-			reject(error.response)
-		})
-	})
+                if (!res.data.error) {
+                    resolve(res.data)
+                } else reject(res)
+
+            }).catch(function(error) {
+                reject(error.response)
+            })
+    })
 }
 
 /*********************************************************************
@@ -143,9 +142,9 @@ this.generateAppKey = function(apiKey, name, description, contactEmail, siteUrl)
  *
  *	@return {number}			The grammar score result to this job
  */
- this.getGrammarScore = function(data) {
- 	return data.grammarScore
- }
+this.getGrammarScore = function(data) {
+    return data.grammarScore
+}
 
 /**
  *	Get API usage statistics from PT
@@ -154,18 +153,18 @@ this.generateAppKey = function(apiKey, name, description, contactEmail, siteUrl)
  *
  *	@return {Object}			The user's usage statistics
  */
- this.getUsage = function(apiKey) {
+this.getUsage = function(apiKey) {
 
- 	const payload = {
-		method: 'GET',
-		url: PT_BASE_URL + "/usage",
-		headers: {
-			'Authorization': apiKey
-		}
-	}
+    const payload = {
+        method: 'GET',
+        url: PT_BASE_URL + "/usage",
+        headers: {
+            'Authorization': apiKey
+        }
+    }
 
-	return axios(payload)
- }
+    return axios(payload)
+}
 
 
 /**
@@ -184,217 +183,217 @@ this.generateAppKey = function(apiKey, name, description, contactEmail, siteUrl)
  */
 this.interactiveEditor = function(config) {
 
-	const data = config.data
-	const apiKey = config.apiKey
-	const ignoreNoReplacement = config.ignoreNoReplacement
+    const data = config.data
+    const apiKey = config.apiKey
+    const ignoreNoReplacement = config.ignoreNoReplacement
 
-	// All functions assume that this metadata has been set when interacting with corrections
-	if (!data.hasMeta) {
-		pt.setMetaData(data)
-	}
+    // All functions assume that this metadata has been set when interacting with corrections
+    if (!data.hasMeta) {
+        pt.setMetaData(data)
+    }
 
-	// Transformations from each sentence flattened into one array for easier indexing
-	const flattenedTransforms = [].concat.apply([], 
-		data.rulesApplied.map(function(sentence) {
-			return sentence.transformations
-		})
-	)
+    // Transformations from each sentence flattened into one array for easier indexing
+    const flattenedTransforms = [].concat.apply([],
+        data.rulesApplied.map(function(sentence) {
+            return sentence.transformations
+        })
+    )
 
-	// Stack tracking accepted/rejected transformations
-	const transformStack = flattenedTransforms.filter(transform => !pt.isClean(transform))
-	var transStackSize = transformStack.length
+    // Stack tracking accepted/rejected transformations
+    const transformStack = flattenedTransforms.filter(transform => !pt.isClean(transform))
+    var transStackSize = transformStack.length
 
-	// Cache of available transformations in current state
-	var allAvailableTransforms = null
+    // Cache of available transformations in current state
+    var allAvailableTransforms = null
 
-	updateAvailableCache()
+    updateAvailableCache()
 
-	// Updates cache of available transformations (optionally skipping suggestions without replacements)
-	function updateAvailableCache() {
-		allAvailableTransforms = flattenedTransforms.filter(function(transform) {
-			return transform.isAvailable && (!ignoreNoReplacement || transform.hasReplacement)
-		})
-	}
+    // Updates cache of available transformations (optionally skipping suggestions without replacements)
+    function updateAvailableCache() {
+        allAvailableTransforms = flattenedTransforms.filter(function(transform) {
+            return transform.isAvailable && (!ignoreNoReplacement || transform.hasReplacement)
+        })
+    }
 
-	const editor = {
+    const editor = {
 
-		// Get the assigned grammar score
-		getGrammarScore: function() {
-			return data.grammarScore
-		},
+        // Get the assigned grammar score
+        getGrammarScore: function() {
+            return data.grammarScore
+        },
 
-		// Accessor for the data
-		getData: function() {
-			return data
-		},
+        // Accessor for the data
+        getData: function() {
+            return data
+        },
 
-		// Get usage statistics for this user (number of requests remaining, etc.)
-		getUsage: function() {
-			return pt.getUsage(apiKey)
-		},
+        // Get usage statistics for this user (number of requests remaining, etc.)
+        getUsage: function() {
+            return pt.getUsage(apiKey)
+        },
 
-		// Get the transform at the specified index (relative to the flattened list of all transformations)
-		getTransform: function(flattenedIndex) {
-			return flattenedTransforms[flattenedIndex]
-		},
+        // Get the transform at the specified index (relative to the flattened list of all transformations)
+        getTransform: function(flattenedIndex) {
+            return flattenedTransforms[flattenedIndex]
+        },
 
-		// Get the sentence at the specified index
-		getSentence: function(sentenceIndex) {
-			return pt.getSentence(data, sentenceIndex)
-		},
-		
-		// Get the sentence containing the specified transform
-		getSentenceFromTransform: function(transform) {
-			return pt.getSentence(data, transform.sentenceIndex)
-		},
+        // Get the sentence at the specified index
+        getSentence: function(sentenceIndex) {
+            return pt.getSentence(data, sentenceIndex)
+        },
 
-		// Get all transforms that are currently valid (their tokensAffected are available in the sentence)
-		getAllAvailableTransforms: function() {
-			return allAvailableTransforms
-		},
+        // Get the sentence containing the specified transform
+        getSentenceFromTransform: function(transform) {
+            return pt.getSentence(data, transform.sentenceIndex)
+        },
 
-		// Returns true if there exists an available, clean transformation
-		hasNextTransform: function() {
-			return allAvailableTransforms.length > 0
-		},
+        // Get all transforms that are currently valid (their tokensAffected are available in the sentence)
+        getAllAvailableTransforms: function() {
+            return allAvailableTransforms
+        },
 
-		// Returns the next available transformation
-		getNextTransform: function() {
-			return allAvailableTransforms[0]
-		},
+        // Returns true if there exists an available, clean transformation
+        hasNextTransform: function() {
+            return allAvailableTransforms.length > 0
+        },
 
-		// Returns a list of all transforms affecting the exact same tokens in the current sentence
-		getOverlappingTransforms: function(transform) {
-			const sentence = pt.getSentence(data, transform.sentenceIndex)
-			const overlappingTransforms = pt.getOverlappingGroup(sentence, transform)
+        // Returns the next available transformation
+        getNextTransform: function() {
+            return allAvailableTransforms[0]
+        },
 
-			return overlappingTransforms.filter(function(t) {
-				return pt.affectsSameTokens(t, transform)
-			})
-		},
+        // Returns a list of all transforms affecting the exact same tokens in the current sentence
+        getOverlappingTransforms: function(transform) {
+            const sentence = pt.getSentence(data, transform.sentenceIndex)
+            const overlappingTransforms = pt.getOverlappingGroup(sentence, transform)
 
-		// Returns the current text of the job (considering whether transforms have been accepted or rejected)
-		getCurrentText: function() {
-			return pt.getCurrentText(data)
-		},
+            return overlappingTransforms.filter(function(t) {
+                return pt.affectsSameTokens(t, transform)
+            })
+        },
 
-		// Accept the transformation and substitute the tokensAdded for the tokensAffected (optionally persisting to database)
-		acceptCorrection: function(transform) {
+        // Returns the current text of the job (considering whether transforms have been accepted or rejected)
+        getCurrentText: function() {
+            return pt.getCurrentText(data)
+        },
 
-			if (pt.acceptCorrection(data, transform, apiKey)) {
-				updateAvailableCache()
-				transformStack.push(transform)
-				transStackSize += 1
-				return true
-			}
-			
-			return false
-		},
+        // Accept the transformation and substitute the tokensAdded for the tokensAffected (optionally persisting to database)
+        acceptCorrection: function(transform) {
 
-		// Reject the transformation (optionally persisting to database)
-		rejectCorrection: function(transform) {
-			if (pt.rejectCorrection(data, transform, apiKey)) {
-				updateAvailableCache()
-				transformStack.push(transform)
-				transStackSize += 1
-				return true
-			}
+            if (pt.acceptCorrection(data, transform, apiKey)) {
+                updateAvailableCache()
+                transformStack.push(transform)
+                transStackSize += 1
+                return true
+            }
 
-			return false
-		},
+            return false
+        },
 
-		// Undo the last transformation action (accept/reject -> clean) (optionally persisting to database)
-		undoLastTransform: function() {
+        // Reject the transformation (optionally persisting to database)
+        rejectCorrection: function(transform) {
+            if (pt.rejectCorrection(data, transform, apiKey)) {
+                updateAvailableCache()
+                transformStack.push(transform)
+                transStackSize += 1
+                return true
+            }
 
-			if (transStackSize > 0) {
-				const lastTransform = transformStack[transStackSize - 1]
+            return false
+        },
 
-				if (pt.resetCorrection(data, lastTransform, apiKey)) {
-					updateAvailableCache()
-					transformStack.pop()
-					transStackSize -= 1
-					return true
-				}
-			}
+        // Undo the last transformation action (accept/reject -> clean) (optionally persisting to database)
+        undoLastTransform: function() {
 
-			return false
-		},
+            if (transStackSize > 0) {
+                const lastTransform = transformStack[transStackSize - 1]
 
-		canMakeTransform: function(transform) {
-			const sentence = pt.getSentence(data, transform.sentenceIndex)
-			return pt.canMakeTransform(sentence, transform)
-		},
+                if (pt.resetCorrection(data, lastTransform, apiKey)) {
+                    updateAvailableCache()
+                    transformStack.pop()
+                    transStackSize -= 1
+                    return true
+                }
+            }
 
-		// Returns true if the last action can be undone, else false
-		canUndoLastTransform: function() {
+            return false
+        },
 
-			if (transStackSize > 0) {
-				const lastTransform = transformStack[transStackSize - 1]
-				const sentence = data.rulesApplied[lastTransform.sentenceIndex]
+        canMakeTransform: function(transform) {
+            const sentence = pt.getSentence(data, transform.sentenceIndex)
+            return pt.canMakeTransform(sentence, transform)
+        },
 
-				return pt.canUndoTransform(sentence, lastTransform)
-			}
-			
+        // Returns true if the last action can be undone, else false
+        canUndoLastTransform: function() {
 
-			return false
-		},
+            if (transStackSize > 0) {
+                const lastTransform = transformStack[transStackSize - 1]
+                const sentence = data.rulesApplied[lastTransform.sentenceIndex]
 
-		// Returns the last transformation that was interacted with
-		getLastTransform: function() {
-			return transformStack[transStackSize - 1]
-		},
+                return pt.canUndoTransform(sentence, lastTransform)
+            }
 
-		// Get the character offset of the transformation (relative to the current state of the sentence)
-		getTransformOffset: function(transform) {
-			return pt.getTransformOffset(data, transform)
-		},
 
-		// Get the character offset of the sentence (relative to the current state of the job)
-		getSentenceOffset: function(sentence) {
-			return pt.getSentenceOffset(data, sentence)
-		},
+            return false
+        },
 
-		// Get the tokensAffected as a string
-		getAffectedText: function(transform) {
-			return pt.getAffectedText(transform)
-		},
+        // Returns the last transformation that was interacted with
+        getLastTransform: function() {
+            return transformStack[transStackSize - 1]
+        },
 
-		// Get the tokensAdded as a string
-		getAddedText: function(transform) {
-			return pt.getAddedText(transform)
-		},
+        // Get the character offset of the transformation (relative to the current state of the sentence)
+        getTransformOffset: function(transform) {
+            return pt.getTransformOffset(data, transform)
+        },
 
-		// Get the original text of the job
-		getOriginalText: function() {
-			return pt.getOriginalText(data)
-		},
+        // Get the character offset of the sentence (relative to the current state of the job)
+        getSentenceOffset: function(sentence) {
+            return pt.getSentenceOffset(data, sentence)
+        },
 
-		// Get all "clean" transformations (ones that have not been accepted or rejected yet)
-		getAllClean: function() {
-			return flattenedTransforms.filter(pt.isClean)
-		},
+        // Get the tokensAffected as a string
+        getAffectedText: function(transform) {
+            return pt.getAffectedText(transform)
+        },
 
-		// Get the number of sentences in the job
-		getNumSentences: function() {
-			return pt.getNumSentences(data)
-		}
-	}
+        // Get the tokensAdded as a string
+        getAddedText: function(transform) {
+            return pt.getAddedText(transform)
+        },
 
-	// Execute all transformations available
-	editor.applyAll = function() {
-		while (editor.hasNextTransform()) {
-			editor.acceptCorrection(editor.getNextTransform())
-		}
-	}
+        // Get the original text of the job
+        getOriginalText: function() {
+            return pt.getOriginalText(data)
+        },
 
-	// Undo all accept/reject actions
-	editor.undoAll = function() {
-		while (editor.canUndoTransform) {
-			editor.undoLastTransform()
-		}
-	}
+        // Get all "clean" transformations (ones that have not been accepted or rejected yet)
+        getAllClean: function() {
+            return flattenedTransforms.filter(pt.isClean)
+        },
 
-	return editor
+        // Get the number of sentences in the job
+        getNumSentences: function() {
+            return pt.getNumSentences(data)
+        }
+    }
+
+    // Execute all transformations available
+    editor.applyAll = function() {
+        while (editor.hasNextTransform()) {
+            editor.acceptCorrection(editor.getNextTransform())
+        }
+    }
+
+    // Undo all accept/reject actions
+    editor.undoAll = function() {
+        while (editor.canUndoTransform) {
+            editor.undoLastTransform()
+        }
+    }
+
+    return editor
 }
 
 /**
@@ -405,7 +404,7 @@ this.interactiveEditor = function(config) {
  *	@return {string}			current text of the job	
  */
 this.getCurrentText = function(data) {
-	return data.rulesApplied.map(pt.getCurrentSentenceText).join("")
+    return data.rulesApplied.map(pt.getCurrentSentenceText).join("")
 }
 
 /**
@@ -419,25 +418,25 @@ this.getCurrentText = function(data) {
  *	@return {boolean}			True if successfully accepted, else false
  */
 this.acceptCorrection = function(data, transform, apiKey) {
-	const sentence = data.rulesApplied[transform.sentenceIndex]
+    const sentence = data.rulesApplied[transform.sentenceIndex]
 
-	if (transform.isAvailable) {
+    if (transform.isAvailable) {
 
-		const prevText = pt.getCurrentSentenceText(sentence)
-		const offset = pt.getTransformOffset(data, transform)
+        const prevText = pt.getCurrentSentenceText(sentence)
+        const offset = pt.getTransformOffset(data, transform)
 
-		makeTransform(sentence, transform)
-		
-		transform.status = pt.TRANSFORM_STATUS_ACCEPTED
+        makeTransform(sentence, transform)
 
-		if (canPersist()) {
-			saveTransformStatus(data, transform, apiKey, prevText, offset)
-		}
+        transform.status = pt.TRANSFORM_STATUS_ACCEPTED
 
-		return true
-	}
+        if (canPersist()) {
+            saveTransformStatus(data, transform, apiKey, prevText, offset)
+        }
 
-	return false
+        return true
+    }
+
+    return false
 }
 
 /**
@@ -451,25 +450,25 @@ this.acceptCorrection = function(data, transform, apiKey) {
  *	@return {boolean}			True if successfully rejected, else false
  */
 this.rejectCorrection = function(data, transform, apiKey) {
-	const sentence = data.rulesApplied[transform.sentenceIndex]
+    const sentence = data.rulesApplied[transform.sentenceIndex]
 
-	if (transform.isAvailable) {
+    if (transform.isAvailable) {
 
-		const prevText = pt.getCurrentSentenceText(sentence)
-		const offset = pt.getTransformOffset(data, transform)
+        const prevText = pt.getCurrentSentenceText(sentence)
+        const offset = pt.getTransformOffset(data, transform)
 
-		// Rejecting a transformation does not affect which transformations are currently available
-		transform.status = pt.TRANSFORM_STATUS_REJECTED
-		transform.isAvailable = false
+        // Rejecting a transformation does not affect which transformations are currently available
+        transform.status = pt.TRANSFORM_STATUS_REJECTED
+        transform.isAvailable = false
 
-		if (canPersist()) {
-			saveTransformStatus(data, transform, apiKey, prevText, offset)
-		}
+        if (canPersist()) {
+            saveTransformStatus(data, transform, apiKey, prevText, offset)
+        }
 
-		return true
-	}
+        return true
+    }
 
-	return false
+    return false
 }
 
 /**
@@ -483,26 +482,26 @@ this.rejectCorrection = function(data, transform, apiKey) {
  *	@return {boolean}			True if successfully reset, else false
  */
 this.resetCorrection = function(data, transform, apiKey) {
-	
-	const sentence = data.rulesApplied[transform.sentenceIndex]
 
-	if (pt.canUndoTransform(sentence, transform)) {
-		undoTransform(sentence, transform)
+    const sentence = data.rulesApplied[transform.sentenceIndex]
 
-		transform.status = pt.TRANSFORM_STATUS_CLEAN
+    if (pt.canUndoTransform(sentence, transform)) {
+        undoTransform(sentence, transform)
 
-		if (canPersist()) {
+        transform.status = pt.TRANSFORM_STATUS_CLEAN
 
-			const text = pt.getCurrentSentenceText(sentence)
-			const offset = pt.getTransformOffset(data, transform)
+        if (canPersist()) {
 
-			saveTransformStatus(data, transform, apiKey, text, offset)
-		}
+            const text = pt.getCurrentSentenceText(sentence)
+            const offset = pt.getTransformOffset(data, transform)
 
-		return true
-	}
+            saveTransformStatus(data, transform, apiKey, text, offset)
+        }
 
-	return false
+        return true
+    }
+
+    return false
 }
 
 /*********************************************************************
@@ -518,7 +517,7 @@ this.resetCorrection = function(data, transform, apiKey) {
  *	@return {number}			The number of sentences in the job
  */
 this.getNumSentences = function(data) {
-	return data.rulesApplied.length
+    return data.rulesApplied.length
 }
 
 /**
@@ -530,7 +529,7 @@ this.getNumSentences = function(data) {
  *	@return {number}				The number of transformations in the sentence
  */
 this.getNumTransformations = function(sentence) {
-	return sentence.transformations.length
+    return sentence.transformations.length
 }
 
 /**
@@ -543,7 +542,7 @@ this.getNumTransformations = function(sentence) {
  *	@return {number}					The number of transformations in the sentence
  */
 this.getTransformationAtIndex = function(sentence, transformIndex) {
-	return sentence.transformations[transformIndex]
+    return sentence.transformations[transformIndex]
 }
 
 /**
@@ -555,7 +554,7 @@ this.getTransformationAtIndex = function(sentence, transformIndex) {
  *	@return {Object}			The sentence object at the specified index
  */
 this.getSentence = function(data, sentenceIndex) {
-	return data.rulesApplied[sentenceIndex]
+    return data.rulesApplied[sentenceIndex]
 }
 
 /**
@@ -574,7 +573,7 @@ this.getSentence = function(data, sentenceIndex) {
  *	@return {Object}			An array of transformations that overlap with the parameter transformation
  */
 this.getOverlappingGroup = function(sentence, transform) {
-	return sentence.groups[transform.groupId]
+    return sentence.groups[transform.groupId]
 }
 
 
@@ -587,7 +586,7 @@ this.getOverlappingGroup = function(sentence, transform) {
  *	@return {string}			The current text of the sentence
  */
 this.getCurrentSentenceText = function(sentence) {
-	return pt.tokensToString(sentence.activeTokens)
+    return pt.tokensToString(sentence.activeTokens)
 }
 
 /**
@@ -599,7 +598,7 @@ this.getCurrentSentenceText = function(sentence) {
  *	@return {string}			The original text of the sentence
  */
 this.getOriginalSentenceText = function(sentence) {
-	return pt.tokensToString(sentence.originalSentence)
+    return pt.tokensToString(sentence.originalSentence)
 }
 
 /**
@@ -611,7 +610,7 @@ this.getOriginalSentenceText = function(sentence) {
  *	@return {string}			The current text of the job
  */
 this.getCurrentText = function(data) {
-	return data.rulesApplied.map(pt.getCurrentSentenceText).join("")
+    return data.rulesApplied.map(pt.getCurrentSentenceText).join("")
 }
 
 
@@ -624,7 +623,7 @@ this.getCurrentText = function(data) {
  *	@return {string}			The original text of the job
  */
 this.getOriginalText = function(data) {
-	return data.rulesApplied.map(pt.getOriginalSentenceText).join("")
+    return data.rulesApplied.map(pt.getOriginalSentenceText).join("")
 }
 
 /**
@@ -637,11 +636,11 @@ this.getOriginalText = function(data) {
  *	@return {boolean}				True if the transformations effect the exact same tokens, else false
  */
 this.affectsSameTokens = function(transform1, transform2) {
-	return transform1.sentenceIndex == transform2.sentenceIndex && 
-		transform1.tokensAffected.length == transform2.tokensAffected.length &&
-		transform1.tokensAffected.every(function(token, index) {
-			return token.id == transform2.tokensAffected[index].id
-		})
+    return transform1.sentenceIndex == transform2.sentenceIndex &&
+        transform1.tokensAffected.length == transform2.tokensAffected.length &&
+        transform1.tokensAffected.every(function(token, index) {
+            return token.id == transform2.tokensAffected[index].id
+        })
 }
 
 /**
@@ -653,7 +652,7 @@ this.affectsSameTokens = function(transform1, transform2) {
  *	@return {number}				The index of the sentence in the job (0-based)
  */
 this.getSentenceIndex = function(transform) {
-	return transform.sentenceIndex
+    return transform.sentenceIndex
 }
 
 /**
@@ -665,7 +664,7 @@ this.getSentenceIndex = function(transform) {
  *	@return {number}				The index of the transformation in the sentence (0-based)
  */
 this.getTransformIndexInSentence = function(transform) {
-	return transform.indexInSentence
+    return transform.indexInSentence
 }
 
 /**
@@ -680,7 +679,7 @@ this.getTransformIndexInSentence = function(transform) {
  *	@return {number}				The index of the transformation in the job (0-based)
  */
 this.getTransformIndex = function(transform) {
-	return transform.transformIndex
+    return transform.transformIndex
 }
 
 /**
@@ -692,7 +691,7 @@ this.getTransformIndex = function(transform) {
  *	@return {string}				The tokens added as a string
  */
 this.getAddedText = function(transform) {
-	return pt.tokensToString(transform.tokensAdded)
+    return pt.tokensToString(transform.tokensAdded)
 }
 
 /**
@@ -704,7 +703,7 @@ this.getAddedText = function(transform) {
  *	@return {string}				The tokens affected as a string
  */
 this.getAffectedText = function(transform) {
-	return pt.tokensToString(transform.tokensAffected)
+    return pt.tokensToString(transform.tokensAffected)
 }
 
 /**
@@ -716,7 +715,7 @@ this.getAffectedText = function(transform) {
  *	@return {boolean}				True if the transform is clean, else false
  */
 this.isClean = function(transform) {
-	return transform.status == pt.TRANSFORM_STATUS_CLEAN
+    return transform.status == pt.TRANSFORM_STATUS_CLEAN
 }
 
 /**
@@ -727,8 +726,8 @@ this.isClean = function(transform) {
  *
  *	@return {boolean}				True if the transform has been accepted, else false
  */
-this.isAccepted= function(transform) {
-	return transform.status == pt.TRANSFORM_STATUS_ACCEPTED
+this.isAccepted = function(transform) {
+    return transform.status == pt.TRANSFORM_STATUS_ACCEPTED
 }
 
 /**
@@ -740,7 +739,7 @@ this.isAccepted= function(transform) {
  *	@return {boolean}				True if the transform has been rejected, else false
  */
 this.isRejected = function(transform) {
-	return transform.status == pt.TRANSFORM_STATUS_REJECTED
+    return transform.status == pt.TRANSFORM_STATUS_REJECTED
 }
 
 /**
@@ -754,7 +753,7 @@ this.isRejected = function(transform) {
  *	@return {boolean}				True if the transform can be made, else false
  */
 this.canMakeTransform = function(sentence, transform) {
-	return tokensArePresent(transform.tokensAffected, sentence.activeTokens)
+    return tokensArePresent(transform.tokensAffected, sentence.activeTokens)
 }
 
 /**
@@ -768,9 +767,9 @@ this.canMakeTransform = function(sentence, transform) {
  *	@return {boolean}				True if the transform can be undone, else false
  */
 this.canUndoTransform = function(sentence, transform) {
-	return !transform.hasReplacement || 
-		(pt.isAccepted(transform) && tokensArePresent(transform.tokensAdded, sentence.activeTokens)) ||
-		(pt.isRejected(transform) && tokensArePresent(transform.tokensAffected, sentence.activeTokens))
+    return !transform.hasReplacement ||
+        (pt.isAccepted(transform) && tokensArePresent(transform.tokensAdded, sentence.activeTokens)) ||
+        (pt.isRejected(transform) && tokensArePresent(transform.tokensAffected, sentence.activeTokens))
 }
 
 
@@ -784,20 +783,20 @@ this.canUndoTransform = function(sentence, transform) {
  */
 this.getSentenceOffset = function(data, sentence) {
 
-	var fullText = ""
-	var offset = -1
+    var fullText = ""
+    var offset = -1
 
-	return data.rulesApplied.find(function(s, sentIndex) {
-		if (sentIndex == sentence.sentenceIndex) {
-			offset = fullText.length
-			return true
-		} else {
-			fullText += pt.getCurrentSentenceText(s)
-			return false
-		}
-	})
+    return data.rulesApplied.find(function(s, sentIndex) {
+        if (sentIndex == sentence.sentenceIndex) {
+            offset = fullText.length
+            return true
+        } else {
+            fullText += pt.getCurrentSentenceText(s)
+            return false
+        }
+    })
 
-	return offset
+    return offset
 }
 
 /**
@@ -811,14 +810,14 @@ this.getSentenceOffset = function(data, sentence) {
  */
 this.getTransformOffset = function(data, transform) {
 
-	const sentence = data.rulesApplied[transform.sentenceIndex]
+    const sentence = data.rulesApplied[transform.sentenceIndex]
 
-	if (pt.canMakeTransform(sentence, transform)) {
-		const activeTokens = sentence.activeTokens
-		return getTransformOffsetHelper(transform, activeTokens)
-	}
+    if (pt.canMakeTransform(sentence, transform)) {
+        const activeTokens = sentence.activeTokens
+        return getTransformOffsetHelper(transform, activeTokens)
+    }
 
-	return -1
+    return -1
 }
 
 /**
@@ -831,9 +830,9 @@ this.getTransformOffset = function(data, transform) {
  *	@return {string}			The tokens joined as a single string
  */
 this.tokensToString = function(tokens) {
-	return tokens.map(function(token) {
-		return token.value + token.after
-	}).join("")
+    return tokens.map(function(token) {
+        return token.value + token.after
+    }).join("")
 }
 
 /**
@@ -871,84 +870,84 @@ this.tokensToString = function(tokens) {
  */
 this.setMetaData = function(data) {
 
-	if (!data.rulesApplied) return
+    if (!data.rulesApplied) return
 
-	// Count all transforms seen (accross all sentences) and assign index (used as unique id)
-	var transformCounter = 0
+    // Count all transforms seen (accross all sentences) and assign index (used as unique id)
+    var transformCounter = 0
 
-	data.rulesApplied.forEach(function(sentence, sentenceIndex) {
+    data.rulesApplied.forEach(function(sentence, sentenceIndex) {
 
-		// current working set of tokens in the sentence
-		sentence.activeTokens = sentence.originalSentence
+        // current working set of tokens in the sentence
+        sentence.activeTokens = sentence.originalSentence
 
-		// hold reference to index
-		sentence.sentenceIndex = sentenceIndex
+        // hold reference to index
+        sentence.sentenceIndex = sentenceIndex
 
-		// track overlapping transform groups
-		sentence.groups = {}
+        // track overlapping transform groups
+        sentence.groups = {}
 
-		// Group id for overlapping transformations in the current sentence
-		var groupIdCounter = 0
+        // Group id for overlapping transformations in the current sentence
+        var groupIdCounter = 0
 
-		const numTransformsInSent = sentence.transformations.length
+        const numTransformsInSent = sentence.transformations.length
 
-		// Assign group id to each transform
-		sentence.transformations.forEach(function(transform, transformIndex) {
+        // Assign group id to each transform
+        sentence.transformations.forEach(function(transform, transformIndex) {
 
-			// Set indices for future reference
-			transform.transformIndex = transformCounter++ // index relative to flattened list of all transforms
-			transform.indexInSentence = transformIndex // index in current sentence
-			transform.sentenceIndex = sentenceIndex // sentence index
+            // Set indices for future reference
+            transform.transformIndex = transformCounter++ // index relative to flattened list of all transforms
+                transform.indexInSentence = transformIndex // index in current sentence
+            transform.sentenceIndex = sentenceIndex // sentence index
 
-			if (!transform.status) {
-				transform.status = pt.TRANSFORM_STATUS_CLEAN
-			}
+            if (!transform.status) {
+                transform.status = pt.TRANSFORM_STATUS_CLEAN
+            }
 
-			/*
-				Since the transformations are topologically sorted (they are in the order that they were made by Perfect Tense),
-				we can just iterate through in-order and make replacements if the state is set to accepted
-			*/
-			updateActiveTokens(sentence, transform)
+            /*
+            	Since the transformations are topologically sorted (they are in the order that they were made by Perfect Tense),
+            	we can just iterate through in-order and make replacements if the state is set to accepted
+            */
+            updateActiveTokens(sentence, transform)
 
-			// Set group id (if not previously marked by upstream transform)
-			if (transform.groupId == undefined) {
-				const groupQueue = [transform]
-				const groupId = groupIdCounter++
-				sentence.groups[groupId] = []
+            // Set group id (if not previously marked by upstream transform)
+            if (transform.groupId == undefined) {
+                const groupQueue = [transform]
+                const groupId = groupIdCounter++
+                    sentence.groups[groupId] = []
 
-				/*
-					Find all transformations that overlap with this transform, then all that overlap with those, etc. (breadth first search)
-				*/
-				while (groupQueue.length > 0) {
-					const nextInGroup = groupQueue.shift()
+                /*
+                	Find all transformations that overlap with this transform, then all that overlap with those, etc. (breadth first search)
+                */
+                while (groupQueue.length > 0) {
+                    const nextInGroup = groupQueue.shift()
 
-					if (!nextInGroup.groupId) {
-						nextInGroup.groupId = groupId
-						sentence.groups[groupId].push(nextInGroup)
+                    if (!nextInGroup.groupId) {
+                        nextInGroup.groupId = groupId
+                        sentence.groups[groupId].push(nextInGroup)
 
-						/*
-						 	Since the transforms are already sorted based on the order they were created,
-						 	we just need to check the rest of the queue for unassigned/overlapping transforms
-						*/
-						for (var i = nextInGroup.indexInSentence + 1; i < numTransformsInSent; i++) {
-							const nextTrans = sentence.transformations[i]
+                        /*
+                         	Since the transforms are already sorted based on the order they were created,
+                         	we just need to check the rest of the queue for unassigned/overlapping transforms
+                        */
+                        for (var i = nextInGroup.indexInSentence + 1; i < numTransformsInSent; i++) {
+                            const nextTrans = sentence.transformations[i]
 
-							// won't be set yet...
-							nextTrans.indexInSentence = i;
+                            // won't be set yet...
+                            nextTrans.indexInSentence = i;
 
-							if (!nextTrans.groupId && transformsOverlap(nextInGroup, nextTrans, true)) {
-								groupQueue.push(nextTrans)
-							}
-						}
-					}
-				}
-			}
-		})
+                            if (!nextTrans.groupId && transformsOverlap(nextInGroup, nextTrans, true)) {
+                                groupQueue.push(nextTrans)
+                            }
+                        }
+                    }
+                }
+            }
+        })
 
-		setIsAvailable(sentence.transformations, sentence)
-	})
+        setIsAvailable(sentence.transformations, sentence)
+    })
 
-	data.hasMeta = true
+    data.hasMeta = true
 }
 
 /**
@@ -960,7 +959,7 @@ this.setMetaData = function(data) {
  *	@param {Object} sentence		The sentence in question
  */
 this.getAvailableTransforms = function(sentence) {
-	return sentence.transformations.filter(transform => transform.isAvailable)
+    return sentence.transformations.filter(transform => transform.isAvailable)
 }
 
 
@@ -978,23 +977,23 @@ this.getAvailableTransforms = function(sentence) {
  *	@return {boolean}			True if the tokens are a valid subsequence, else false
  */
 function tokensArePresent(tokens, allTokens) {
-	var lastIndex = -1
+    var lastIndex = -1
 
-	const isAvailable = tokens.every(function(token) {
+    const isAvailable = tokens.every(function(token) {
 
-		const indexOfId = allTokens.findIndex(function(activeToken) {
-			return token.id == activeToken.id
-		})
+        const indexOfId = allTokens.findIndex(function(activeToken) {
+            return token.id == activeToken.id
+        })
 
-		if (indexOfId != -1 && (lastIndex == -1 || indexOfId == lastIndex + 1)) {
-			lastIndex = indexOfId
-			return true
-		}
+        if (indexOfId != -1 && (lastIndex == -1 || indexOfId == lastIndex + 1)) {
+            lastIndex = indexOfId
+            return true
+        }
 
-		return false
-	})
+        return false
+    })
 
-	return isAvailable
+    return isAvailable
 }
 
 /**
@@ -1009,13 +1008,15 @@ function tokensArePresent(tokens, allTokens) {
  */
 function arraysOverlap(a1, a2, comparator) {
 
-	comparator = comparator || function(x, y) { return x == y }
+    comparator = comparator || function(x, y) {
+        return x == y
+    }
 
-	return a1.some(function(e1) {
-		return a2.some(function(e2) {
-			return comparator(e1, e2)
-		})
-	})
+    return a1.some(function(e1) {
+        return a2.some(function(e2) {
+            return comparator(e1, e2)
+        })
+    })
 }
 
 /**
@@ -1028,7 +1029,7 @@ function arraysOverlap(a1, a2, comparator) {
  *	@return {boolean}					True if the token ids are the same, else false
  */
 function compareTokens(t1, t2) {
-	return t1.id == t2.id
+    return t1.id == t2.id
 }
 
 /**
@@ -1046,9 +1047,9 @@ function compareTokens(t1, t2) {
  */
 function transformsOverlap(t1, t2, inOrder) {
 
-	return arraysOverlap(t1.tokensAffected, t2.tokensAffected, compareTokens) || // directly affect same tokens
-		arraysOverlap(t1.tokensAdded, t2.tokensAffected, compareTokens) || // t2 dependent on t1
-		(!inOrder && arraysOverlap(t2.tokensAdded, t1.tokensAffected, compareTokens)) // t1 dependent on t2 (don't check if transforms are in order)
+    return arraysOverlap(t1.tokensAffected, t2.tokensAffected, compareTokens) || // directly affect same tokens
+        arraysOverlap(t1.tokensAdded, t2.tokensAffected, compareTokens) || // t2 dependent on t1
+        (!inOrder && arraysOverlap(t2.tokensAdded, t1.tokensAffected, compareTokens)) // t1 dependent on t2 (don't check if transforms are in order)
 }
 
 /**
@@ -1061,22 +1062,22 @@ function transformsOverlap(t1, t2, inOrder) {
  *	@return {number}					True  character offset of the transformation, or -1 if it is not present
  */
 function getTransformOffsetHelper(transform, activeTokens) {
-	
-	const firstAffected = transform.tokensAffected[0]
 
-	var offset = -1
-	var sentString = ""
+    const firstAffected = transform.tokensAffected[0]
 
-	activeTokens.find(function(token, index) {
-		if (token.id == firstAffected.id) {
-			offset = sentString.length
-			return true
-		} else {
-			sentString += token.value + token.after
-		}
-	})
+    var offset = -1
+    var sentString = ""
 
-	return offset
+    activeTokens.find(function(token, index) {
+        if (token.id == firstAffected.id) {
+            offset = sentString.length
+            return true
+        } else {
+            sentString += token.value + token.after
+        }
+    })
+
+    return offset
 }
 
 /**
@@ -1087,7 +1088,7 @@ function getTransformOffsetHelper(transform, activeTokens) {
  *	@return {Object}			A shallow copy of the hash
  */
 function cloneHash(hash) {
-	return Object.assign({}, hash)
+    return Object.assign({}, hash)
 }
 
 /**
@@ -1097,7 +1098,7 @@ function cloneHash(hash) {
  *	@return {boolean}		True if can persist, else false
  */
 function canPersist() {
-	return pt.persist
+    return pt.persist
 }
 
 /**
@@ -1116,17 +1117,17 @@ function canPersist() {
  */
 function saveTransformStatus(ptData, transform, apiKey, sentenceText, offset) {
 
-	const data = {
-		jobId: ptData.id,
-		responseType: "rulesApplied",
-		sentenceIndex: transform.sentenceIndex,
-		transformIndex: transform.indexInSentence,
-		sentence: sentenceText,
-		offset: offset,
-		status: transform.status
-	}
+    const data = {
+        jobId: ptData.id,
+        responseType: "rulesApplied",
+        sentenceIndex: transform.sentenceIndex,
+        transformIndex: transform.indexInSentence,
+        sentence: sentenceText,
+        offset: offset,
+        status: transform.status
+    }
 
-	submitToPT(data, apiKey, "/updateStatus")
+    submitToPT(data, apiKey, "/updateStatus")
 }
 
 /**
@@ -1142,18 +1143,18 @@ function saveTransformStatus(ptData, transform, apiKey, sentenceText, offset) {
  */
 function submitToPT(data, apiKey, endPoint) {
 
-	const payload = {
-		method: 'POST',
-		url: PT_BASE_URL + endPoint,
-		data: data,
-		headers: {
-			'Authorization': apiKey,
-			'AppAuthorization': pt.appKey,
-			'Content-Type': 'application/json'
-		}
-	}
+    const payload = {
+        method: 'POST',
+        url: PT_BASE_URL + endPoint,
+        data: data,
+        headers: {
+            'Authorization': apiKey,
+            'AppAuthorization': pt.appKey,
+            'Content-Type': 'application/json'
+        }
+    }
 
-	return axios(payload)
+    return axios(payload)
 }
 
 /**
@@ -1167,15 +1168,15 @@ function submitToPT(data, apiKey, endPoint) {
  */
 function setIsAvailable(transforms, sentence) {
 
-	function setAvailable(transform) {
-		if (pt.canMakeTransform(sentence, transform)) {
-			transform.isAvailable = true
-		} else {
-			transform.isAvailable = false
-		}
-	}
+    function setAvailable(transform) {
+        if (pt.canMakeTransform(sentence, transform)) {
+            transform.isAvailable = true
+        } else {
+            transform.isAvailable = false
+        }
+    }
 
-	transforms.forEach(setAvailable)
+    transforms.forEach(setAvailable)
 }
 
 
@@ -1196,31 +1197,31 @@ function setIsAvailable(transforms, sentence) {
  */
 function replaceTokens(tokens, affected, added) {
 
-	// Can't replace if they're not there!
-	if (!tokensArePresent(affected, tokens)) {
-		return tokens
-	}
+    // Can't replace if they're not there!
+    if (!tokensArePresent(affected, tokens)) {
+        return tokens
+    }
 
-	const firstTokenId = affected[0].id
-	const lastTokenId = affected[affected.length - 1].id
+    const firstTokenId = affected[0].id
+    const lastTokenId = affected[affected.length - 1].id
 
-	const startInd = tokens.findIndex(function(token) {
-		return token.id == firstTokenId
-	})
+    const startInd = tokens.findIndex(function(token) {
+        return token.id == firstTokenId
+    })
 
-	const endInd = tokens.findIndex(function(token) {
-		return token.id == lastTokenId
-	})
+    const endInd = tokens.findIndex(function(token) {
+        return token.id == lastTokenId
+    })
 
-	// Sanity check. They should be there if tokensArePresent passed
-	if (startInd != -1 && endInd != -1 && endInd >= startInd) {
-		const before = tokens.slice(0, startInd)
-		const after = tokens.slice(endInd + 1)
-		return before.concat(added).concat(after)
-	}
+    // Sanity check. They should be there if tokensArePresent passed
+    if (startInd != -1 && endInd != -1 && endInd >= startInd) {
+        const before = tokens.slice(0, startInd)
+        const after = tokens.slice(endInd + 1)
+        return before.concat(added).concat(after)
+    }
 
-	// Failed to replace for unknown reason
-	return tokens
+    // Failed to replace for unknown reason
+    return tokens
 }
 
 /**
@@ -1236,11 +1237,11 @@ function replaceTokens(tokens, affected, added) {
  *	@param {Object} transform		The transformation whose overlapping group will be refreshed
  */
 function updateTokenGroup(sentence, transform) {
-	// Cached list of all transformations that overlap
-	const tokenGroup = sentence.groups[transform.groupId]
+    // Cached list of all transformations that overlap
+    const tokenGroup = sentence.groups[transform.groupId]
 
-	// Set isAvailable status of all overlapping transformations
-	setIsAvailable(tokenGroup, sentence)
+    // Set isAvailable status of all overlapping transformations
+    setIsAvailable(tokenGroup, sentence)
 }
 
 
@@ -1257,15 +1258,15 @@ function updateTokenGroup(sentence, transform) {
  *	@param {Object} transform		The transformation to accept
  */
 function makeTransform(sentence, transform) {
-	if (transform.hasReplacement) {
-		sentence.activeTokens = replaceTokens(sentence.activeTokens, transform.tokensAffected, transform.tokensAdded)
+    if (transform.hasReplacement) {
+        sentence.activeTokens = replaceTokens(sentence.activeTokens, transform.tokensAffected, transform.tokensAdded)
 
-		// update isAvailable status of all overlapping transformations
-		updateTokenGroup(sentence, transform)
-	}
+        // update isAvailable status of all overlapping transformations
+        updateTokenGroup(sentence, transform)
+    }
 
-	// Explicity set, since transformations with hasReplacement = false will technically still be executable
-	transform.isAvailable = false
+    // Explicity set, since transformations with hasReplacement = false will technically still be executable
+    transform.isAvailable = false
 }
 
 /**
@@ -1282,14 +1283,14 @@ function makeTransform(sentence, transform) {
  */
 function undoTransform(sentence, transform) {
 
-	if (transform.hasReplacement) {
-		sentence.activeTokens = replaceTokens(sentence.activeTokens, transform.tokensAdded, transform.tokensAffected)
+    if (transform.hasReplacement) {
+        sentence.activeTokens = replaceTokens(sentence.activeTokens, transform.tokensAdded, transform.tokensAffected)
 
-		// update isAvailable status of all overlapping transformations
-		updateTokenGroup(sentence, transform)
-	}
+        // update isAvailable status of all overlapping transformations
+        updateTokenGroup(sentence, transform)
+    }
 
-	transform.isAvailable = true
+    transform.isAvailable = true
 }
 
 /**
@@ -1301,11 +1302,7 @@ function undoTransform(sentence, transform) {
  *	@param {Object} transform		The transformation to accept
  */
 function updateActiveTokens(sentence, transform) {
-	if (transform.hasReplacement && pt.isAccepted(transform)) {
-		sentence.activeTokens = replaceTokens(sentence.activeTokens, transform.tokensAffected, transform.tokensAdded)
-	}
+    if (transform.hasReplacement && pt.isAccepted(transform)) {
+        sentence.activeTokens = replaceTokens(sentence.activeTokens, transform.tokensAffected, transform.tokensAdded)
+    }
 }
-
-
-
-
