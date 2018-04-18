@@ -1,11 +1,11 @@
 /**
- * 	This is a client-side library to interact with the Perfect Tense API using the "rulesApplied" response type.
+ *     This is a client-side library to interact with the Perfect Tense API using the "rulesApplied" response type.
  *
- *	Note: The word "transformation" is used interchangably with "correction" in all comments. Both refer to a
+ *    Note: The word "transformation" is used interchangably with "correction" in all comments. Both refer to a
  *  grammatical mistake found in the document (also interchangable with "job")
  */
 /*********************************************************************
-						Init Axios
+                        Init Axios
 **********************************************************************/
 const axios = require('axios').create()
 const pt = this
@@ -13,8 +13,8 @@ const pt = this
 // don't actually set axios baseUrl to avoid conflicting with other usage
 const PT_BASE_URL = 'https://api.perfecttense.com'
 
-/**********************************f**********************************
-					Perfect Tense Specific
+/*********************************************************************
+                    Perfect Tense Specific
 **********************************************************************/
 this.TRANSFORM_STATUS_ACCEPTED = "accept"
 this.TRANSFORM_STATUS_REJECTED = "reject"
@@ -28,13 +28,13 @@ this.verbose = true
 this.persist = true
 
 /**
- * 	Initialize PT client
- * 	
- * 	@param {string} config.appKey							App key assigned to this registered application [insert link to register app]
- * 	@param {boolean} config.verbose=true					Set verbose console output for debugging purposes
- * 	@param {boolean} config.persist=true					Optionally persist corrections (Help Perfect Tense get better!)
- *	@param {Object} config.options={}						Optional default options such as protected text (see API documentation)
- *	@param {Object} config.responseType=["rulesApplied"]	Optional array of response types (see API documentation) 
+ * Initialize PT client
+ *     
+ * @param {string} config.appKey                           App key assigned to this registered application [insert link to register app]
+ * @param {boolean} config.verbose=true                    Set verbose console output for debugging purposes
+ * @param {boolean} config.persist=true                    Optionally persist corrections (Help Perfect Tense get better!)
+ * @param {Object} config.options={}                       Optional default options such as protected text (see API documentation)
+ * @param {Object} config.responseType=["rulesApplied"]    Optional array of response types (see API documentation) 
  */
 this.initialize = function(config) {
     this.appKey = config.appKey || "",
@@ -45,18 +45,18 @@ this.initialize = function(config) {
 }
 
 /*********************************************************************
-			Interaction With Perfect Tense API
+                Interaction With Perfect Tense API
 **********************************************************************/
 
 /*
-	Submit text to Perfect Tense, receiving specified responseTypes in result.
-
- * 	@param {string} text			Text to be submitted
- * 	@param {string} apiKey			The user's API key
- *	@param {Object} options			Options such as protected text. Defaults to options set during initialization
- *	@param {Object} responseType	Array of response types. Defaults to responseType set during initialization
+ * Submit text to Perfect Tense, receiving specified responseTypes in result.
  *
- *	@return {Object}				Promise containing the job result
+ * @param {string} text             Text to be submitted
+ * @param {string} apiKey           The user's API key
+ * @param {Object} options          Options such as protected text. Defaults to options set during initialization
+ * @param {Object} responseType     Array of response types. Defaults to responseType set during initialization
+ *
+ * @return {Object}                 Promise containing the job result
  */
 this.submitJob = function(text, apiKey, options, responseType) {
     const data = {
@@ -94,15 +94,15 @@ this.submitJob = function(text, apiKey, options, responseType) {
 }
 
 /**
- *	Generate an App key for this integration (alternatively, use our UI here: https://app.perfecttense.com/api).
+ * Generate an App key for this integration (alternatively, use our UI here: https://app.perfecttense.com/api).
  *
- *	@param {String} $apiKey				The API key to register this app under (likely your own)
- *	@param {String} $name				The name of this app
- *	@param {String} $description		The description of this app (minimum 50 characters)
- *	@param {String} $contactEmail		Contact email address for this app (defaults to the email associated with the API key)
- *	@param {String} $siteUrl			Optional URL that can be used to sign up for/use this app.
+ * @param {String} $apiKey              The API key to register this app under (likely your own)
+ * @param {String} $name                The name of this app
+ * @param {String} $description         The description of this app (minimum 50 characters)
+ * @param {String} $contactEmail        Contact email address for this app (defaults to the email associated with the API key)
+ * @param {String} $siteUrl             Optional URL that can be used to sign up for/use this app.
  *
- *	@return {String}					A unique app key
+ * @return {String}                     A unique app key
  */
 this.generateAppKey = function(apiKey, name, description, contactEmail, siteUrl) {
 
@@ -128,30 +128,30 @@ this.generateAppKey = function(apiKey, name, description, contactEmail, siteUrl)
 }
 
 /*********************************************************************
-				Interaction With Perfect Tense Result
+                Interaction With Perfect Tense Result
 **********************************************************************/
 
 /**
- *	Get the grammar score result of this job.
- *	
- *	If the grammar score was requested in the original request, a value from 0.0 to 100.0
- *	will be returned. Otherwise, null will be returned.
+ * Get the grammar score result of this job.
+ *    
+ * If the grammar score was requested in the original request, a value from 0.0 to 100.0
+ * will be returned. Otherwise, null will be returned.
  *
  *
- * 	@param {Object} data		Result returned from submitJob
+ * @param {Object} data     Result returned from submitJob
  *
- *	@return {number}			The grammar score result to this job
+ * @return {number}         The grammar score result to this job
  */
 this.getGrammarScore = function(data) {
     return data.grammarScore
 }
 
 /**
- *	Get API usage statistics from PT
+ * Get API usage statistics from PT
  *
- *	@param {String} apiKey		The api key of the user you are requesting usage statistics for
+ * @param {String} apiKey     The api key of the user you are requesting usage statistics for
  *
- *	@return {Object}			The user's usage statistics
+ * @return {Object}           The user's usage statistics
  */
 this.getUsage = function(apiKey) {
 
@@ -168,18 +168,18 @@ this.getUsage = function(apiKey) {
 
 
 /**
- *	Returns an interactive editor used to work through accepting/rejecting all
- *	corrections returned by Perfect Tense.
+ * Returns an interactive editor used to work through accepting/rejecting all
+ * corrections returned by Perfect Tense.
  *
- *	This editor will handle tracking state information such as which transformations are avilable
- *	at any given time, and is the recommended way to interact with a result.
+ * This editor will handle tracking state information such as which transformations are avilable
+ * at any given time, and is the recommended way to interact with a result.
  *
  *
- *	@param {Object} config.data							Result returned from submitJob
- *	@param {Object} [config.apiKey]						Optional API Key associated with this job (to track transformation accept/reject/clean statuses)
- *	@param {Object} [config.ignoreNoReplacement=false]	Optionally ignore transformations that are comments (i.e. "This sentence is a fragment")			
+ * @param {Object} config.data                          Result returned from submitJob
+ * @param {Object} [config.apiKey]                      Optional API Key associated with this job (to track transformation accept/reject/clean statuses)
+ * @param {Object} [config.ignoreNoReplacement=false]   Optionally ignore transformations that are comments (i.e. "This sentence is a fragment")            
  *
- *	@return {Object}			Interactive Editor
+ * @return {Object}                                     Interactive Editor
  */
 this.interactiveEditor = function(config) {
 
@@ -397,25 +397,25 @@ this.interactiveEditor = function(config) {
 }
 
 /**
- *	Get the current text of the job, considering transformations that have been accepted or rejected.
+ * Get the current text of the job, considering transformations that have been accepted or rejected.
  *
- *	@param {Object} data		Result returned from submitJob
+ * @param {Object} data     Result returned from submitJob
  *
- *	@return {string}			current text of the job	
+ * @return {string}         current text of the job    
  */
 this.getCurrentText = function(data) {
     return data.rulesApplied.map(pt.getCurrentSentenceText).join("")
 }
 
 /**
- *  Accepts the transformation and modifies the state of the job to reflect the change
+ * Accepts the transformation and modifies the state of the job to reflect the change
  *
  *
- * 	@param {Object} data		Result returned from submitJob
- *	@param {Object}	transform 	The transformation to be accepted
- *	@param {string}	[apiKey]	Optional user API Key to track transformation status (found at https://app.perfecttense.com/home)
+ * @param {Object} data           Result returned from submitJob
+ * @param {Object} transform      The transformation to be accepted
+ * @param {string} [apiKey]       Optional user API Key to track transformation status (found at https://app.perfecttense.com/home)
  *
- *	@return {boolean}			True if successfully accepted, else false
+ * @return {boolean}              True if successfully accepted, else false
  */
 this.acceptCorrection = function(data, transform, apiKey) {
     const sentence = data.rulesApplied[transform.sentenceIndex]
@@ -440,14 +440,14 @@ this.acceptCorrection = function(data, transform, apiKey) {
 }
 
 /**
- *  Rejects the transformation and modifies the state of the job to reflect the change
+ * Rejects the transformation and modifies the state of the job to reflect the change
  *
  *
- * 	@param {Object} data		Result returned from submitJob
- *	@param {Object}	transform 	The transformation to be rejected
- *	@param {string}	[apiKey]	Optional user API Key to track transformation status (found at https://app.perfecttense.com/home)
+ * @param {Object} data         Result returned from submitJob
+ * @param {Object} transform    The transformation to be rejected
+ * @param {string} [apiKey]     Optional user API Key to track transformation status (found at https://app.perfecttense.com/home)
  *
- *	@return {boolean}			True if successfully rejected, else false
+ * @return {boolean}            True if successfully rejected, else false
  */
 this.rejectCorrection = function(data, transform, apiKey) {
     const sentence = data.rulesApplied[transform.sentenceIndex]
@@ -472,14 +472,14 @@ this.rejectCorrection = function(data, transform, apiKey) {
 }
 
 /**
- *  Resets the transformation to "clean" and modifies the state of the job to reflect the change
+ * Resets the transformation to "clean" and modifies the state of the job to reflect the change
  *
  *
- * 	@param {Object} data		Result returned from submitJob
- *	@param {Object}	transform 	The transformation to be reset
- *	@param {string}	[apiKey]	Optional user API Key to track transformation status (found at https://app.perfecttense.com/home)
+ * @param {Object} data          Result returned from submitJob
+ * @param {Object} transform     The transformation to be reset
+ * @param {string} [apiKey]      Optional user API Key to track transformation status (found at https://app.perfecttense.com/home)
  *
- *	@return {boolean}			True if successfully reset, else false
+ * @return {boolean}             True if successfully reset, else false
  */
 this.resetCorrection = function(data, transform, apiKey) {
 
@@ -505,72 +505,72 @@ this.resetCorrection = function(data, transform, apiKey) {
 }
 
 /*********************************************************************
-				Perfect Tense Result Utilities
+                 Perfect Tense Result Utilities
 **********************************************************************/
 
 /**
- *  Returns the number of sentences in the job.
+ * Returns the number of sentences in the job.
  *
  *
- * 	@param {Object} data		Result returned from submitJob
+ * @param {Object} data     Result returned from submitJob
  *
- *	@return {number}			The number of sentences in the job
+ * @return {number}         The number of sentences in the job
  */
 this.getNumSentences = function(data) {
     return data.rulesApplied.length
 }
 
 /**
- *  Returns the number of transformations in a sentence.
+ * Returns the number of transformations in a sentence.
  *
  *
- * 	@param {Object} sentence		A sentence object
+ * @param {Object} sentence     A sentence object
  *
- *	@return {number}				The number of transformations in the sentence
+ * @return {number}             The number of transformations in the sentence
  */
 this.getNumTransformations = function(sentence) {
     return sentence.transformations.length
 }
 
 /**
- *  Returns the transformation at the specified index in the sentence.
+ * Returns the transformation at the specified index in the sentence.
  *
  *
- * 	@param {Object} sentence			A sentence object
- *	@param {number} transformIndex 		The transformation index
+ * @param {Object} sentence             A sentence object
+ * @param {number} transformIndex       The transformation index
  *
- *	@return {number}					The number of transformations in the sentence
+ * @return {number}                     The number of transformations in the sentence
  */
 this.getTransformationAtIndex = function(sentence, transformIndex) {
     return sentence.transformations[transformIndex]
 }
 
 /**
- *  Gets the sentence at the specified index.
+ * Gets the sentence at the specified index.
  *
  *
- * 	@param {Object} data		Result returned from submitJob
+ * @param {Object} data     Result returned from submitJob
  *
- *	@return {Object}			The sentence object at the specified index
+ * @return {Object}         The sentence object at the specified index
  */
 this.getSentence = function(data, sentenceIndex) {
     return data.rulesApplied[sentenceIndex]
 }
 
 /**
- *  Get all transformations that overlap with the parameter transform.
+ * Get all transformations that overlap with the parameter transform.
  *
- *	Ex: "He hzve be there before"
- *	t1: "hzve" -> "have"
- *	t2: "have be" -> "has been"
+ * Ex: "He hzve be there before"
+ * t1: "hzve" -> "have"
+ * t2: "have be" -> "has been"
  *
- *	getOverlappingGroup(sentence, t1) will return [t1, t2]
+ * getOverlappingGroup(sentence, t1) will return [t1, t2]
  *
  *
- * 	@param {Object} sentence	A sentence from the submitJob response (data.rulesApplied[index])
- *	@param {Object} transform 	A transformation inside that sentence (sentence.transformations[index])
+ * @param {Object} sentence     A sentence from the submitJob response (data.rulesApplied[index])
+ * @param {Object} transform    A transformation inside that sentence (sentence.transformations[index])
  *
- *	@return {Object}			An array of transformations that overlap with the parameter transformation
+ * @return {Object}             An array of transformations that overlap with the parameter transformation
  */
 this.getOverlappingGroup = function(sentence, transform) {
     return sentence.groups[transform.groupId]
@@ -578,36 +578,36 @@ this.getOverlappingGroup = function(sentence, transform) {
 
 
 /**
- *  Get the text of the sentence in its current state, considering accepted/rejected corrections.
+ * Get the text of the sentence in its current state, considering accepted/rejected corrections.
  *
  *
- * 	@param {Object} sentence	Sentence object
+ * @param {Object} sentence    Sentence object
  *
- *	@return {string}			The current text of the sentence
+ * @return {string}            The current text of the sentence
  */
 this.getCurrentSentenceText = function(sentence) {
     return pt.tokensToString(sentence.activeTokens)
 }
 
 /**
- *  Get the original text of a sentence, prior to any corrections.
+ * Get the original text of a sentence, prior to any corrections.
  *
  *
- * 	@param {Object} sentence	Sentence object
+ * @param {Object} sentence    Sentence object
  *
- *	@return {string}			The original text of the sentence
+ * @return {string}            The original text of the sentence
  */
 this.getOriginalSentenceText = function(sentence) {
     return pt.tokensToString(sentence.originalSentence)
 }
 
 /**
- *  Get the current text of an entire document/job, considering accepted/rejected corrections.
+ * Get the current text of an entire document/job, considering accepted/rejected corrections.
  *
  *
- * 	@param {Object} data		Result returned from submitJob
+ * @param {Object} data        Result returned from submitJob
  *
- *	@return {string}			The current text of the job
+ * @return {string}            The current text of the job
  */
 this.getCurrentText = function(data) {
     return data.rulesApplied.map(pt.getCurrentSentenceText).join("")
@@ -615,25 +615,25 @@ this.getCurrentText = function(data) {
 
 
 /**
- *  Get the original text of an entire document/job, prior to any corrections.
+ * Get the original text of an entire document/job, prior to any corrections.
  *
  *
- * 	@param {Object} data		Result returned from submitJob
+ * @param {Object} data        Result returned from submitJob
  *
- *	@return {string}			The original text of the job
+ * @return {string}            The original text of the job
  */
 this.getOriginalText = function(data) {
     return data.rulesApplied.map(pt.getOriginalSentenceText).join("")
 }
 
 /**
- *  Returns true if the parameter transformations affect the exact same tokens in the sentence.
+ * Returns true if the parameter transformations affect the exact same tokens in the sentence.
  *
  *
- * 	@param {Object} transform1		The first transformation
- * 	@param {Object} transform2		The second transformation
+ * @param {Object} transform1        The first transformation
+ * @param {Object} transform2        The second transformation
  *
- *	@return {boolean}				True if the transformations effect the exact same tokens, else false
+ * @return {boolean}                 True if the transformations effect the exact same tokens, else false
  */
 this.affectsSameTokens = function(transform1, transform2) {
     return transform1.sentenceIndex == transform2.sentenceIndex &&
@@ -644,12 +644,12 @@ this.affectsSameTokens = function(transform1, transform2) {
 }
 
 /**
- *  Get the sentence index of the parameter transformation.
+ * Get the sentence index of the parameter transformation.
  *
  *
- * 	@param {Object} transform		The transformation in question
+ * @param {Object} transform       The transformation in question
  *
- *	@return {number}				The index of the sentence in the job (0-based)
+ * @return {number}                The index of the sentence in the job (0-based)
  */
 this.getSentenceIndex = function(transform) {
     return transform.sentenceIndex
@@ -659,112 +659,112 @@ this.getSentenceIndex = function(transform) {
  *  Get the index of the parameter transformation in the current sentence.
  *
  *
- * 	@param {Object} transform		The transformation in question
+ * @param {Object} transform       The transformation in question
  *
- *	@return {number}				The index of the transformation in the sentence (0-based)
+ * @return {number}                The index of the transformation in the sentence (0-based)
  */
 this.getTransformIndexInSentence = function(transform) {
     return transform.indexInSentence
 }
 
 /**
- *  Get the index of the parameter transformation in the job.
+ * Get the index of the parameter transformation in the job.
  *
- *	Note that this is a 0-based index relative to ALL transformations in the job,
- *	not just those in the current sentence.
+ * Note that this is a 0-based index relative to ALL transformations in the job,
+ * not just those in the current sentence.
  *
  *
- * 	@param {Object} transform		The transformation in question
+ * @param {Object} transform       The transformation in question
  *
- *	@return {number}				The index of the transformation in the job (0-based)
+ * @return {number}                The index of the transformation in the job (0-based)
  */
 this.getTransformIndex = function(transform) {
     return transform.transformIndex
 }
 
 /**
- *  Get the "tokens added" field as text (from an array of tokens).
+ * Get the "tokens added" field as text (from an array of tokens).
  *
  *
- * 	@param {Object} transform		The transformation in question
+ * @param {Object} transform       The transformation in question
  *
- *	@return {string}				The tokens added as a string
+ * @return {string}                The tokens added as a string
  */
 this.getAddedText = function(transform) {
     return pt.tokensToString(transform.tokensAdded)
 }
 
 /**
- *  Get the "tokens affected" field as text (from an array of tokens).
+ * Get the "tokens affected" field as text (from an array of tokens).
  *
  *
- * 	@param {Object} transform		The transformation in question
+ * @param {Object} transform       The transformation in question
  *
- *	@return {string}				The tokens affected as a string
+ * @return {string}                The tokens affected as a string
  */
 this.getAffectedText = function(transform) {
     return pt.tokensToString(transform.tokensAffected)
 }
 
 /**
- *  Returns true if the transformation is "clean", i.e. has not been accepted or rejected by the user.
+ * Returns true if the transformation is "clean", i.e. has not been accepted or rejected by the user.
  *
  *
- * 	@param {Object} transform		The transformation in question
+ * @param {Object} transform        The transformation in question
  *
- *	@return {boolean}				True if the transform is clean, else false
+ * @return {boolean}                True if the transform is clean, else false
  */
 this.isClean = function(transform) {
     return transform.status == pt.TRANSFORM_STATUS_CLEAN
 }
 
 /**
- *	Returns true if the transformation has been accepted by the user
+ * Returns true if the transformation has been accepted by the user
  *
  *
- *	@param {Object} transform		The transformation in question
+ * @param {Object} transform        The transformation in question
  *
- *	@return {boolean}				True if the transform has been accepted, else false
+ * @return {boolean}                True if the transform has been accepted, else false
  */
 this.isAccepted = function(transform) {
     return transform.status == pt.TRANSFORM_STATUS_ACCEPTED
 }
 
 /**
- *	Returns true if the transformation has been rejected by the user
+ * Returns true if the transformation has been rejected by the user
  *
  *
- * 	@param {Object} transform		The transformation in question
+ * @param {Object} transform        The transformation in question
  *
- *	@return {boolean}				True if the transform has been rejected, else false
+ * @return {boolean}                True if the transform has been rejected, else false
  */
 this.isRejected = function(transform) {
     return transform.status == pt.TRANSFORM_STATUS_REJECTED
 }
 
 /**
- *	Returns true if the transformation can be made, given the current state of the sentence.
+ * Returns true if the transformation can be made, given the current state of the sentence.
  *
- *	This is checked by verifying that all of the "tokensAffected" in the transformation are present
- *	in the active working set of tokens in the sentence.
+ * This is checked by verifying that all of the "tokensAffected" in the transformation are present
+ * in the active working set of tokens in the sentence.
  *
- *	@param {Object} transform		The transformation in question
+ * @param {Object} transform        The transformation in question
  *
- *	@return {boolean}				True if the transform can be made, else false
+ * @return {boolean}                True if the transform can be made, else false
  */
 this.canMakeTransform = function(sentence, transform) {
     return tokensArePresent(transform.tokensAffected, sentence.activeTokens)
 }
 
 /**
- *	Returns true if the transformation can be undone, given the current state of the sentence.
+ * Returns true if the transformation can be undone, given the current state of the sentence.
  *
- *	This is checked by verifying that all of the "tokensAdded" in the transformation are present
- *	in the active working set of tokens in the sentence (if there are any).
+ * This is checked by verifying that all of the "tokensAdded" in the transformation are present
+ * in the active working set of tokens in the sentence (if there are any).
  *
- *	@param {Object} transform		The transformation in question
+ * @param {Object} transform        The transformation in question
  *
- *	@return {boolean}				True if the transform can be undone, else false
+ * @return {boolean}                True if the transform can be undone, else false
  */
 this.canUndoTransform = function(sentence, transform) {
     return !transform.hasReplacement ||
@@ -774,12 +774,12 @@ this.canUndoTransform = function(sentence, transform) {
 
 
 /**
- *	Get the character offset of the sentence, given the current state of the job.
+ * Get the character offset of the sentence, given the current state of the job.
  *
- * 	@param {Object} data		Result returned from submitJob
- *	@param {Object} sentence	The sentence in question
+ * @param {Object} data        Result returned from submitJob
+ * @param {Object} sentence    The sentence in question
  *
- *	@return {number}			The character offset of the sentence
+ * @return {number}            The character offset of the sentence
  */
 this.getSentenceOffset = function(data, sentence) {
 
@@ -800,13 +800,13 @@ this.getSentenceOffset = function(data, sentence) {
 }
 
 /**
- *	Get the character offset of the transformation relative to the sentence start
- *	given the current state of the job.
+ * Get the character offset of the transformation relative to the sentence start
+ * given the current state of the job.
  *
- * 	@param {Object} data		Result returned from submitJob
- *	@param {Object} sentence	The transformation in question
+ * @param {Object} data        Result returned from submitJob
+ * @param {Object} sentence    The transformation in question
  *
- *	@return {number}			The character offset of the transformation (relative to sentence start), or -1 if it is not present
+ * @return {number}            The character offset of the transformation (relative to sentence start), or -1 if it is not present
  */
 this.getTransformOffset = function(data, transform) {
 
@@ -821,13 +821,13 @@ this.getTransformOffset = function(data, transform) {
 }
 
 /**
- *	Join tokens into a single string.
+ * Join tokens into a single string.
  *
- *	This will map each token to [token.value] + [token.after] and join together.
+ * This will map each token to [token.value] + [token.after] and join together.
  *
- *	@param {Object} tokens		The tokens to turn into a string
+ * @param {Object} tokens      The tokens to turn into a string
  *
- *	@return {string}			The tokens joined as a single string
+ * @return {string}            The tokens joined as a single string
  */
 this.tokensToString = function(tokens) {
     return tokens.map(function(token) {
@@ -836,37 +836,37 @@ this.tokensToString = function(tokens) {
 }
 
 /**
- *	Set job metadata in-place for easier interaction/manipulation.
+ * Set job metadata in-place for easier interaction/manipulation.
  *
- *	Main steps:
+ * Main steps:
  *
- *	1. 
- *		Some transformations overlap/are derived from the result of others. 
- *		Iterate through all transformations and mark transformations that are 
- *		dependent on others as being members of the same group.
+ * 1. 
+ *     Some transformations overlap/are derived from the result of others. 
+ *     Iterate through all transformations and mark transformations that are 
+ *     dependent on others as being members of the same group.
  *
- *			ex: "He hzve be there befor"
+ *         ex: "He hzve be there befor"
  *
- *			Transformations:
- *				hzve -> have
- *				have be -> has been
- *				befor -> before
- *			Groups:
- *				0:
- *					hzve -> have
- *					have be -> has been
- *				1:
- *					befor -> before
- *		2.
- *			Set transform -> sentence/transform index and sentence -> sentenceIndex for quicker referencing
- *		3.
- *			Update the "active tokens" in the sentence based on the current status of the transformations
- *			(useful if recovering a previous job that already has transformations set to accept/reject)
+ *         Transformations:
+ *             hzve -> have
+ *             have be -> has been
+ *             befor -> before
+ *         Groups:
+ *             0:
+ *                 hzve -> have
+ *                 have be -> has been
+ *             1:
+ *                 befor -> before
+ * 2.
+ *     Set transform -> sentence/transform index and sentence -> sentenceIndex for quicker referencing
+ * 3.
+ *     Update the "active tokens" in the sentence based on the current status of the transformations
+ *     (useful if recovering a previous job that already has transformations set to accept/reject)
  *
- *			If not recovering a previous job, set the active tokens to the initial set.
+ *     If not recovering a previous job, set the active tokens to the initial set.
  *
  *
- * 	@param {Object} data		Result returned from submitJob
+ * @param {Object} data        Result returned from submitJob
  */
 this.setMetaData = function(data) {
 
@@ -904,8 +904,8 @@ this.setMetaData = function(data) {
             }
 
             /*
-            	Since the transformations are topologically sorted (they are in the order that they were made by Perfect Tense),
-            	we can just iterate through in-order and make replacements if the state is set to accepted
+                Since the transformations are topologically sorted (they are in the order that they were made by Perfect Tense),
+                we can just iterate through in-order and make replacements if the state is set to accepted
             */
             updateActiveTokens(sentence, transform)
 
@@ -916,7 +916,7 @@ this.setMetaData = function(data) {
                     sentence.groups[groupId] = []
 
                 /*
-                	Find all transformations that overlap with this transform, then all that overlap with those, etc. (breadth first search)
+                    Find all transformations that overlap with this transform, then all that overlap with those, etc. (breadth first search)
                 */
                 while (groupQueue.length > 0) {
                     const nextInGroup = groupQueue.shift()
@@ -926,8 +926,8 @@ this.setMetaData = function(data) {
                         sentence.groups[groupId].push(nextInGroup)
 
                         /*
-                         	Since the transforms are already sorted based on the order they were created,
-                         	we just need to check the rest of the queue for unassigned/overlapping transforms
+                             Since the transforms are already sorted based on the order they were created,
+                             we just need to check the rest of the queue for unassigned/overlapping transforms
                         */
                         for (var i = nextInGroup.indexInSentence + 1; i < numTransformsInSent; i++) {
                             const nextTrans = sentence.transformations[i]
@@ -951,12 +951,12 @@ this.setMetaData = function(data) {
 }
 
 /**
- *	Get all available transformations in the sentence.
+ * Get all available transformations in the sentence.
  *
- *	It is assumed that the "isAvailable" field in each transformation is kept up-to-date
- *	(generally handled for you when using this API).
+ * It is assumed that the "isAvailable" field in each transformation is kept up-to-date
+ * (generally handled for you when using this API).
  *
- *	@param {Object} sentence		The sentence in question
+ * @param {Object} sentence        The sentence in question
  */
 this.getAvailableTransforms = function(sentence) {
     return sentence.transformations.filter(transform => transform.isAvailable)
@@ -964,17 +964,17 @@ this.getAvailableTransforms = function(sentence) {
 
 
 /*********************************************************************
-				Private Helper Functions/Utilities
+                Private Helper Functions/Utilities
 **********************************************************************/
 
 /**
- *  Returns true if the tokens are a valid subsequence of the active tokens in the sentence.
+ * Returns true if the tokens are a valid subsequence of the active tokens in the sentence.
  *
  *
- * 	@param {Object} tokens		An array of token objects
- * 	@param {Object} allTokens	An array of tokens to look for "tokens" in
+ * @param {Object} tokens       An array of token objects
+ * @param {Object} allTokens    An array of tokens to look for "tokens" in
  *
- *	@return {boolean}			True if the tokens are a valid subsequence, else false
+ * @return {boolean}            True if the tokens are a valid subsequence, else false
  */
 function tokensArePresent(tokens, allTokens) {
     var lastIndex = -1
@@ -997,14 +997,14 @@ function tokensArePresent(tokens, allTokens) {
 }
 
 /**
- *  Returns true if the elements of the parameter arrays overlap, optionally using the passed comparator.
+ * Returns true if the elements of the parameter arrays overlap, optionally using the passed comparator.
  *
  *
- * 	@param {Object} a1					The first array
- * 	@param {Object} a2					The second array
- *	@param {function} comparator=null	Optional comparator function
+ * @param {Object} a1                   The first array
+ * @param {Object} a2                   The second array
+ * @param {function} comparator=null    Optional comparator function
  *
- *	@return {boolean}					True if the array elements overlap, else false
+ * @return {boolean}                    True if the array elements overlap, else false
  */
 function arraysOverlap(a1, a2, comparator) {
 
@@ -1020,30 +1020,30 @@ function arraysOverlap(a1, a2, comparator) {
 }
 
 /**
- *  Returns true if the ids of the parameter tokens match.
+ * Returns true if the ids of the parameter tokens match.
  *
  *
- * 	@param {Object} t1					The first token
- * 	@param {Object} t2					The second token
+ * @param {Object} t1                   The first token
+ * @param {Object} t2                   The second token
  *
- *	@return {boolean}					True if the token ids are the same, else false
+ * @return {boolean}                    True if the token ids are the same, else false
  */
 function compareTokens(t1, t2) {
     return t1.id == t2.id
 }
 
 /**
- *  Returns true if the parameter transformations overlap in any way, considering both tokensAffected and tokensAdded.
+ * Returns true if the parameter transformations overlap in any way, considering both tokensAffected and tokensAdded.
  *
- *	If inOrder is true, it is assumed that t1 came prior to t2 in the correction pipeline, and we are guaranteed
- *	that the tokensAffected of t1 do not overlap with the tokensAdded of t2 (t1 is not dependent on t2)
+ * If inOrder is true, it is assumed that t1 came prior to t2 in the correction pipeline, and we are guaranteed
+ * that the tokensAffected of t1 do not overlap with the tokensAdded of t2 (t1 is not dependent on t2)
  *
  *
- * 	@param {Object} t1					The first transformation
- * 	@param {Object} t2					The second transformation
- *	@param {boolean} inOrder=false		True if the transformations are in the order they were created, else false
+ * @param {Object} t1                   The first transformation
+ * @param {Object} t2                   The second transformation
+ * @param {boolean} inOrder=false       True if the transformations are in the order they were created, else false
  *
- *	@return {boolean}					True if the transformations overlap, else false
+ * @return {boolean}                    True if the transformations overlap, else false
  */
 function transformsOverlap(t1, t2, inOrder) {
 
@@ -1053,13 +1053,13 @@ function transformsOverlap(t1, t2, inOrder) {
 }
 
 /**
- *	Helper function to get the character offset of a transformations.
+ * Helper function to get the character offset of a transformations.
  *
  *
- * 	@param {Object} transform			The transformation in question
- * 	@param {Object} activeTokens		The array of active tokens in the sentence
+ * @param {Object} transform           The transformation in question
+ * @param {Object} activeTokens        The array of active tokens in the sentence
  *
- *	@return {number}					True  character offset of the transformation, or -1 if it is not present
+ * @return {number}                    True  character offset of the transformation, or -1 if it is not present
  */
 function getTransformOffsetHelper(transform, activeTokens) {
 
@@ -1081,39 +1081,39 @@ function getTransformOffsetHelper(transform, activeTokens) {
 }
 
 /**
- *	Helper to clone a hash object.
+ * Helper to clone a hash object.
  *
- *	@param {Object} hash		The hash to be cloned
+ * @param {Object} hash        The hash to be cloned
  *
- *	@return {Object}			A shallow copy of the hash
+ * @return {Object}            A shallow copy of the hash
  */
 function cloneHash(hash) {
     return Object.assign({}, hash)
 }
 
 /**
- *	Check if the client has been configured to persist transformation status updates.
+ * Check if the client has been configured to persist transformation status updates.
  *
  *
- *	@return {boolean}		True if can persist, else false
+ * @return {boolean}        True if can persist, else false
  */
 function canPersist() {
     return pt.persist
 }
 
 /**
- *	Save the transformation's status (clean, accepted, rejected).
+ * Save the transformation's status (clean, accepted, rejected).
  *
- *	This is optional and can be turned off when calling "initialize".
+ * This is optional and can be turned off when calling "initialize".
  *
- *	Please consider leaving this enabled, as it helps Perfect Tense learn!
+ * Please consider leaving this enabled, as it helps Perfect Tense learn!
  *
  *
- *	@param {Object} ptData			Result returned from submitJob
- *	@param {Object} transform		The transformation to save
- *	@param {string} apiKey			The apiKey associated with this job
- *	@param {string} sentenceText	The sentence's current text (just prior to making transformation)
- *	@param {number} offset			Offset of the transform's tokensAffected in the sentenceText
+ * @param {Object} ptData            Result returned from submitJob
+ * @param {Object} transform         The transformation to save
+ * @param {string} apiKey            The apiKey associated with this job
+ * @param {string} sentenceText      The sentence's current text (just prior to making transformation)
+ * @param {number} offset            Offset of the transform's tokensAffected in the sentenceText
  */
 function saveTransformStatus(ptData, transform, apiKey, sentenceText, offset) {
 
@@ -1131,15 +1131,15 @@ function saveTransformStatus(ptData, transform, apiKey, sentenceText, offset) {
 }
 
 /**
- *	Utility to submit a payload to the Perfect Tense API
+ * Utility to submit a payload to the Perfect Tense API
  *
- *	Once configured, this integration's "App Key" will be inserted into all API requests.
+ * Once configured, this integration's "App Key" will be inserted into all API requests.
  *
- *	See our API documentation for more information: https://www.perfecttense.com/docs/#introduction
+ * See our API documentation for more information: https://www.perfecttense.com/docs/#introduction
  *
- *	@param {Object} data			Payload to be submitted (see api docs: )
- *	@param {Object} apiKey			The user's apiKey to validate this request
- *	@param {string} endPoint		The API endpoint (see docs)
+ * @param {Object} data            Payload to be submitted (see api docs: )
+ * @param {Object} apiKey           The user's apiKey to validate this request
+ * @param {string} endPoint        The API endpoint (see docs)
  */
 function submitToPT(data, apiKey, endPoint) {
 
@@ -1158,13 +1158,13 @@ function submitToPT(data, apiKey, endPoint) {
 }
 
 /**
- *	The the "isAvailable" status of the parameter transformations.
+ * The the "isAvailable" status of the parameter transformations.
  *
- *	A transformation is defined as "available" if its tokensAffected field is a valid 
- *	subsequence of the active tokens in the sentence (after any accept/reject actions).
+ * A transformation is defined as "available" if its tokensAffected field is a valid 
+ * subsequence of the active tokens in the sentence (after any accept/reject actions).
  *
- *	@param {Object} transforms		The transformation to be updated
- *	@param {Object} sentence		The sentence that the transformations belong to
+ * @param {Object} transforms      The transformation to be updated
+ * @param {Object} sentence        The sentence that the transformations belong to
  */
 function setIsAvailable(transforms, sentence) {
 
@@ -1181,19 +1181,19 @@ function setIsAvailable(transforms, sentence) {
 
 
 /**
- *	Utility to replace the "affected" tokens with the "added" tokens in the parameter "tokens" array.
+ * Utility to replace the "affected" tokens with the "added" tokens in the parameter "tokens" array.
  *
- *	When a transformation is "accepted", we replace the "tokensAffected" with the "tokensAdded".
+ * When a transformation is "accepted", we replace the "tokensAffected" with the "tokensAdded".
  *
- *	When a transformation is "undone", we do the opposite.
+ * When a transformation is "undone", we do the opposite.
  *
- *	If "affepted" is not a valid subsequence of the parameter "tokens", then no replacement can be made
- *	and the original tokens are returned.
+ * If "affected" is not a valid subsequence of the parameter "tokens", then no replacement can be made
+ * and the original tokens are returned.
  *
  *
- *	@param {Object} tokens		An array of tokens to make the replacement in
- *	@param {Object} affected	A subsequence of "tokens" to be replaced
- *	@param {Object} added		An array of tokens that will replace "affected"
+ * @param {Object} tokens      An array of tokens to make the replacement in
+ * @param {Object} affected    A subsequence of "tokens" to be replaced
+ * @param {Object} added       An array of tokens that will replace "affected"
  */
 function replaceTokens(tokens, affected, added) {
 
@@ -1225,16 +1225,16 @@ function replaceTokens(tokens, affected, added) {
 }
 
 /**
- *	Update the "isAvailable" status of every transformation in the same "group"
- *	as the parameter transform in the sentence.
+ * Update the "isAvailable" status of every transformation in the same "group"
+ * as the parameter transform in the sentence.
  *
- *	When a transformation is accepted, rejected, or undone, we only want to refresh
- *	the status of transformations that potentially overlap/are affected. In "setMetaData",
- *	we grouped all transformations that overlapped together, so we can just use that cache here.
+ * When a transformation is accepted, rejected, or undone, we only want to refresh
+ * the status of transformations that potentially overlap/are affected. In "setMetaData",
+ * we grouped all transformations that overlapped together, so we can just use that cache here.
  *
  *
- *	@param {Object} sentence		The sentence that the transformation is in
- *	@param {Object} transform		The transformation whose overlapping group will be refreshed
+ * @param {Object} sentence        The sentence that the transformation is in
+ * @param {Object} transform       The transformation whose overlapping group will be refreshed
  */
 function updateTokenGroup(sentence, transform) {
     // Cached list of all transformations that overlap
@@ -1246,16 +1246,16 @@ function updateTokenGroup(sentence, transform) {
 
 
 /**
- *	Utility to "make" a transformation (accept it).
+ * Utility to "make" a transformation (accept it).
  *
- *	This involves swapping the tokensAdded in for the tokensAffected (if the transform has a replacement),
- *	and refreshing the "isAvailable" status of all tokens in the same overlapping group.
+ * This involves swapping the tokensAdded in for the tokensAffected (if the transform has a replacement),
+ * and refreshing the "isAvailable" status of all tokens in the same overlapping group.
  *
- *	Note that "canMakeTransform" should generally be called before this.
+ * Note that "canMakeTransform" should generally be called before this.
  *
  *
- *	@param {Object} sentence		The sentence that the transformation is in
- *	@param {Object} transform		The transformation to accept
+ * @param {Object} sentence        The sentence that the transformation is in
+ * @param {Object} transform       The transformation to accept
  */
 function makeTransform(sentence, transform) {
     if (transform.hasReplacement) {
@@ -1270,16 +1270,16 @@ function makeTransform(sentence, transform) {
 }
 
 /**
- *	Utility to "undo" a transformation.
+ * Utility to "undo" a transformation.
  *
- *	This involves swapping the tokensAffected in for the tokensAdded (if the transform has a replacement),
- *	and refreshing the "isAvailable" status of all tokens in the same overlapping group.
+ * This involves swapping the tokensAffected in for the tokensAdded (if the transform has a replacement),
+ * and refreshing the "isAvailable" status of all tokens in the same overlapping group.
  *
- *	Note that "canUndoTransform" should generally be called before this.
+ * Note that "canUndoTransform" should generally be called before this.
  *
  *
- *	@param {Object} sentence		The sentence that the transformation is in
- *	@param {Object} transform		The transformation to undo
+ * @param {Object} sentence        The sentence that the transformation is in
+ * @param {Object} transform       The transformation to undo
  */
 function undoTransform(sentence, transform) {
 
@@ -1294,12 +1294,12 @@ function undoTransform(sentence, transform) {
 }
 
 /**
- *	Utility used during setMetaData to update the active tokens if the recovered transformation was accepted.
+ * Utility used during setMetaData to update the active tokens if the recovered transformation was accepted.
  *
- *	Updates the active working set of tokens for the sentence.
+ * Updates the active working set of tokens for the sentence.
  *
- *	@param {Object} sentence		The sentence that the transformation is in
- *	@param {Object} transform		The transformation to accept
+ * @param {Object} sentence        The sentence that the transformation is in
+ * @param {Object} transform       The transformation to accept
  */
 function updateActiveTokens(sentence, transform) {
     if (transform.hasReplacement && pt.isAccepted(transform)) {
