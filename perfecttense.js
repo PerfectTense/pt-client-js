@@ -1,8 +1,8 @@
 /**
  * This is a client-side library to interact with the Perfect Tense API using the "rulesApplied" response type.
  *
- *  Note: The word "transformation" is used interchangably with "correction" in all comments. Both refer to a
- *  grammatical mistake found in the document (also interchangable with "job")
+ * Note: The word "transformation" is used interchangably with "correction" in all comments. Both refer to a
+ * grammatical mistake found in the document (also interchangable with "job")
  */
 /*********************************************************************
                         Init Axios
