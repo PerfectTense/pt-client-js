@@ -1,8 +1,8 @@
 /**
- * 	This is a client-side library to interact with the Perfect Tense API using the "rulesApplied" response type.
+ *	This is a client-side library to interact with the Perfect Tense API using the "rulesApplied" response type.
  *
  *	Note: The word "transformation" is used interchangably with "correction" in all comments. Both refer to a
- *  grammatical mistake found in the document (also interchangable with "job")
+ *	grammatical mistake found in the document (also interchangable with "job")
  */
 
 /*********************************************************************
@@ -922,7 +922,7 @@ this.setMetaData = function(data) {
 				while (groupQueue.length > 0) {
 					const nextInGroup = groupQueue.shift()
 
-					if (!nextInGroup.groupId) {
+					if (nextInGroup.groupId == undefined) {
 						nextInGroup.groupId = groupId
 						sentence.groups[groupId].push(nextInGroup)
 
@@ -936,7 +936,7 @@ this.setMetaData = function(data) {
 							// won't be set yet...
 							nextTrans.indexInSentence = i;
 
-							if (!nextTrans.groupId && transformsOverlap(nextInGroup, nextTrans, true)) {
+							if (nextTrans.groupId == undefined && transformsOverlap(nextInGroup, nextTrans, true)) {
 								groupQueue.push(nextTrans)
 							}
 						}
