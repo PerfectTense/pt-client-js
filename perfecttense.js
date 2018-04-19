@@ -254,13 +254,21 @@ this.interactiveEditor = function(config) {
         },
 
         // Returns true if there exists an available, clean transformation
-        hasNextTransform: function() {
-            return allAvailableTransforms.length > 0
+        hasNextTransform: function(ignoreSuggestions) {
+        	if (ignoreSuggestions) {
+        		return getNextNonSuggestion() != null
+        	} else {
+        		return allAvailableTransforms.length > 0
+        	}  
         },
 
         // Returns the next available transformation
-        getNextTransform: function() {
-            return allAvailableTransforms[0]
+        getNextTransform: function(ignoreSuggestions) {
+        	if (ignoreSuggestions) {
+        		return getNextNonSuggestion()
+        	} else {
+        		return allAvailableTransforms[0]
+        	}  
         },
 
         // Returns a list of all transforms affecting the exact same tokens in the current sentence
@@ -380,10 +388,17 @@ this.interactiveEditor = function(config) {
         }
     }
 
+    // private utility to get the next non-suggestion
+    function getNextNonSuggestion() {
+    	return allAvailableTransforms.find(function(transform) {
+	        return !transform.isSuggestion
+	    })
+    }
+
     // Execute all transformations available
-    editor.applyAll = function() {
-        while (editor.hasNextTransform()) {
-            editor.acceptCorrection(editor.getNextTransform())
+    editor.applyAll = function(ignoreSuggestions) {
+        while (editor.hasNextTransform(ignoreSuggestions)) {
+            editor.acceptCorrection(editor.getNextTransform(ignoreSuggestions))
         }
     }
 

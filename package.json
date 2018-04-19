@@ -1,6 +1,6 @@
 {
   "name": "perfecttense",
-  "version": "1.0.29",
+  "version": "1.0.32",
   "description": "Client-side library to interact with the Perfect Tense API.",
   "main": "perfecttense.js",
   "scripts": {
