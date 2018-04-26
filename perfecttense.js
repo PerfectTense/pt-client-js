@@ -385,6 +385,10 @@ this.interactiveEditor = function(config) {
         // Get the number of sentences in the job
         getNumSentences: function() {
             return pt.getNumSentences(data)
+        },
+
+        getNumTransformations: function() {
+            return flattenedTransforms.length
         }
     }
 
