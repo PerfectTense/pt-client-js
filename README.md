@@ -27,6 +27,26 @@ Using npm:
 $ npm install perfecttense --save
 ```
 
+## Generate an App Key
+
+The best way to generate an App key is to [use our UI](https://app.perfecttense.com/api).
+
+However, you can alternatively use our `/generateAppKey` endpoint as well, available through this SDK.
+
+```
+const ptClient = require('perfecttense')
+
+ptClient.generateAppKey(
+	"[Your API Key]",
+	"Test App", 
+	"This is a brief description of the use of this application",
+	"[Email address]", 
+	"[Application URL]"
+).then(function(result) {
+	const appKey = result.data.key
+})
+```
+
 ## Initializing
 
 Once you have obtained an `App key` [here](https://app.perfecttense.com/api), you can initialize a pt-client object and begin interacting with our API.
@@ -84,9 +104,10 @@ ptClient.submitJob([text], [user's API Key]).then(ptSuccess, ptFailure)
 Users have a limited number of daily requests. Using our `/usage` endpoint, you may fetch usage statistics on behalf of users at any time.
 
 ```
-const usage = ptClient.getUsage([User's API key])
+ptClient.getUsage([User's API key]).then(function(result) {
+	const numReqRemaining = result.data.apiRemainToday
+})
 
-const numReqRemaining = usage.apiRemainToday
 ```
 
 ## Interaction With Result
