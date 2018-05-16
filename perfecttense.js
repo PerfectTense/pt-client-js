@@ -413,6 +413,12 @@ this.interactiveEditor = function(config) {
         }
     }
 
+    // Get the character offset of the correct relative to the entire document
+    editor.getTransformDocumentOffset = function(transform) {
+    	const sentence = editor.getSentenceFromTransform(transform)
+    	return editor.getSentenceOffset(sentence) + editor.getTransformOffset(transform)
+    }
+
     return editor
 }
 
