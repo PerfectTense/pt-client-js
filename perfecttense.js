@@ -286,6 +286,11 @@ this.interactiveEditor = function(config) {
             return pt.getCurrentText(data)
         },
 
+        // Returns the current text of the sentence (considering whether transforms have been accepted or rejected)
+        getCurrentSentenceText: function(sentence) {
+            return pt.getCurrentSentenceText(sentence)
+        },
+
         // Accept the transformation and substitute the tokensAdded for the tokensAffected (optionally persisting to database)
         acceptCorrection: function(transform) {
 
