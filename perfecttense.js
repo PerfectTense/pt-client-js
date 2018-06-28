@@ -40,15 +40,11 @@ this.apiKeyIsValid = function(apiKey) {
     const payload = {
         method: 'GET',
         url: PT_BASE_URL + "/testAuth",
-        //data: {},
         headers: {
             'Authorization': apiKey,
             'Content-Type': 'application/json'
         }
     }
-
-    console.log("Making request: ")
-    console.log(payload)
 
     function apiSuccess(response) {
         return true
