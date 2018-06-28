@@ -29,6 +29,23 @@ this.verbose = true
 this.persist = true
 
 /**
+ * Initialize PT client
+ *     
+ * @param {string} config.appKey                           App key assigned to this registered application [insert link to register app]
+ * @param {boolean} config.verbose=true                    Set verbose console output for debugging purposes
+ * @param {boolean} config.persist=true                    Optionally persist corrections (Help Perfect Tense get better!)
+ * @param {Object} config.options={}                       Optional default options such as protected text (see API documentation)
+ * @param {Object} config.responseType=["rulesApplied"]    Optional array of response types (see API documentation) 
+ */
+this.initialize = function(config) {
+    this.appKey = config.appKey || "",
+        this.verbose = config.verbose,
+        this.persist = config.persist,
+        this.options = config.options,
+        this.responseType = config.responseType || this.ALL_RESPONSE_TYPES
+}
+
+/**
  * Test the validity of the parameter API key
  *     
  * @param {string} apiKey           The API key to test
@@ -60,17 +77,6 @@ this.apiKeyIsValid = function(apiKey) {
 /*********************************************************************
                 Interaction With Perfect Tense API
 **********************************************************************/
-
-/*
- * Submit text to Perfect Tense, receiving specified responseTypes in result.
- *
- * @param {string} text             Text to be submitted
- * @param {string} apiKey           The user's API key
- * @param {Object} options          Options such as protected text. Defaults to options set during initialization
- * @param {Object} responseType     Array of response types. Defaults to responseType set during initialization
- *
- * @return {Object}                 Promise containing the job result
- */
 
 
 /*
